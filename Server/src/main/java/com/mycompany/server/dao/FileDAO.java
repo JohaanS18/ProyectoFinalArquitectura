@@ -21,7 +21,7 @@ public class FileDAO {
              FileInputStream fileInputStream = new FileInputStream(file)) {
 
             // Calcular hash del archivo
-            String hash = calculateFileHash(file);
+            String hash=calculateFileHash(file);
 
             // Generar un UUID para este archivo
             String uuid = java.util.UUID.randomUUID().toString();
