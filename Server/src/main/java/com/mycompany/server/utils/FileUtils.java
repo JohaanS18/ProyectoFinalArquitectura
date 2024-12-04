@@ -5,7 +5,6 @@ import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
 import java.io.FileInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileUtils {

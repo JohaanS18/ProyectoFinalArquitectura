@@ -1,7 +1,6 @@
 package com.mycompany.server.service;
 
-import com.mycompany.server.dao.FileDAO;
-import com.mycompany.server.integration.RabbitMQManager;
+import com.mycompany.server.dao.IFileDAO;
 import com.mycompany.server.model.FileMetadata;
 import com.mycompany.server.utils.FileUtils;
 
@@ -14,10 +13,14 @@ import java.util.Map;
 
 
 public class FileService {
-    private final FileDAO fileDAO = new FileDAO();
-    private final RabbitMQManager rabbitMQManager = RabbitMQManager.getInstance();
-    
-    
+    private final IFileDAO fileDAO;
+    private final INotificationService notificationService;
+
+    public FileService(IFileDAO fileDAO, INotificationService notificationService) {
+        this.fileDAO = fileDAO;
+        this.notificationService = notificationService;
+    }
+   
 
 public boolean processFile(String filePath) throws IOException, NoSuchAlgorithmException {
     File file = new File(filePath);
@@ -31,7 +34,7 @@ public boolean processFile(String filePath) throws IOException, NoSuchAlgorithmE
         Map<String, Object> result = fileDAO.saveFile(metadata, file);
         if (result.containsKey("uuid")) {
             String uuid = (String) result.get("uuid");
-            rabbitMQManager.notifyNewFile("Llegó un nuevo archivo con UUID: " + uuid);
+            notificationService.notify("Llegó un nuevo archivo con UUID: " + uuid);
             return true;
         }
     } catch (Exception e) {

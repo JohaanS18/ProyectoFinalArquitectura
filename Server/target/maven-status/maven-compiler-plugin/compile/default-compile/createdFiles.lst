@@ -3,5 +3,7 @@ com\mycompany\server\dao\FileDAO.class
 com\mycompany\server\Server.class
 com\mycompany\server\utils\FileUtils.class
 com\mycompany\server\utils\DBConnection.class
+com\mycompany\server\controller\ServerController.class
+com\mycompany\server\service\RabbitMQNotificationService.class
 com\mycompany\server\model\FileMetadata.class
 com\mycompany\server\service\FileService.class

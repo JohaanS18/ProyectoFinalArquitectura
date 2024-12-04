@@ -5,10 +5,13 @@
 package com.mycompany.server.dao;
 import com.mycompany.server.model.FileMetadata;
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 /**
  *
  * @author Johan Sebastian
  */
 public interface IFileDAO {
-    long saveFile(FileMetadata metadata, File file);
+    Map<String, Object> saveFile(FileMetadata metadata, File file) throws IOException, NoSuchAlgorithmException;
 }

@@ -10,8 +10,9 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileDAO {
+public class FileDAO implements IFileDAO {
 
+    @Override
     public Map<String, Object> saveFile(FileMetadata metadata, File file) throws IOException, NoSuchAlgorithmException {
         String sql = "INSERT INTO file (namefile, hash, metadata, archivo, uuid) VALUES (?, ?, ?, ?, ?)";
         Map<String, Object> result = new HashMap<>();
@@ -21,7 +22,7 @@ public class FileDAO {
              FileInputStream fileInputStream = new FileInputStream(file)) {
 
             // Calcular hash del archivo
-            String hash=calculateFileHash(file);
+            String hash = calculateFileHash(file);
 
             // Generar un UUID para este archivo
             String uuid = java.util.UUID.randomUUID().toString();

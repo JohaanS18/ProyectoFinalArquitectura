@@ -1,6 +1,12 @@
 package com.mycompany.server;
 
+import com.mycompany.server.controller.ServerController;
+import com.mycompany.server.dao.FileDAO;
+import com.mycompany.server.integration.RabbitMQManager;
 import com.mycompany.server.service.FileService;
+import com.mycompany.server.service.INotificationService;
+import com.mycompany.server.service.RabbitMQNotificationService;
+
 
 import java.io.*;
 import java.net.*;
@@ -14,50 +20,37 @@ public class Server {
 
     public static void main(String[] args) {
         System.out.println("Servidor escuchando en el puerto " + SERVER_PORT);
-        FileService fileService = new FileService();
-        
+
+        // Crear dependencias
+        FileDAO fileDAO = new FileDAO();
+        RabbitMQManager rabbitMQManager = RabbitMQManager.getInstance();
+        INotificationService notificationService = new RabbitMQNotificationService(rabbitMQManager); // Servicio de notificaciones
+        FileService fileService = new FileService(fileDAO, notificationService); // Servicio principal
+
+        // Crear el controlador
+        ServerController serverController = new ServerController(fileService);
+
+        // Crear un pool de hilos para manejar clientes
+        ExecutorService clientHandlerPool = Executors.newFixedThreadPool(10);
 
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
-                new Thread(() -> {
+
+                // Manejar al cliente en un hilo separado
+                clientHandlerPool.execute(() -> {
                     try {
-                        handleClient(clientSocket, fileService);
+                        serverController.handleClient(clientSocket);
                     } catch (NoSuchAlgorithmException ex) {
                         Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }).start();
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static void handleClient(Socket clientSocket, FileService fileService) throws NoSuchAlgorithmException {
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-            String filePath;
-
-            while (true) {
-                output.println("Especifique la ruta del archivo o 'salir':");
-                filePath = input.readLine();
-
-                if ("salir".equalsIgnoreCase(filePath)) {
-                    output.println("Desconectado.");
-                    break;
-                }
-
-                boolean success = fileService.processFile(filePath);
-                if (success) {
-                    output.println("Archivo procesado exitosamente.");
-                } else {
-                    output.println("Error al procesar el archivo. Verifique la ruta.");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            clientHandlerPool.shutdown();
         }
     }
 }
