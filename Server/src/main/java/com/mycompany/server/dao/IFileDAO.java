@@ -13,5 +13,5 @@ import java.util.Map;
  * @author Johan Sebastian
  */
 public interface IFileDAO {
-    Map<String, Object> saveFile(FileMetadata metadata, File file) throws IOException, NoSuchAlgorithmException;
+    Map<String, Object> saveFile(String metadata, File file) throws IOException, NoSuchAlgorithmException;
 }

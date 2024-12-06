@@ -13,7 +13,7 @@ import java.util.Map;
 public class FileDAO implements IFileDAO {
 
     @Override
-    public Map<String, Object> saveFile(FileMetadata metadata, File file) throws IOException, NoSuchAlgorithmException {
+    public Map<String, Object> saveFile(String metadata, File file) throws IOException, NoSuchAlgorithmException {
         String sql = "INSERT INTO file (namefile, hash, metadata, archivo, uuid) VALUES (?, ?, ?, ?, ?)";
         Map<String, Object> result = new HashMap<>();
 
@@ -30,7 +30,7 @@ public class FileDAO implements IFileDAO {
             // Insertar datos
             statement.setString(1, file.getName());               // Nombre del archivo
             statement.setString(2, hash);                        // Hash del archivo
-            statement.setString(3, metadata.toJson());           // Metadata como JSON
+            statement.setString(3, metadata);           // Metadata como JSON
             statement.setBinaryStream(4, fileInputStream);       // Contenido binario del archivo
             statement.setString(5, uuid);                        // UUID generado
 
