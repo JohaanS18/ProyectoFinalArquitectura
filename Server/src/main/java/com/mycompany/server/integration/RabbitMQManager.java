@@ -1,5 +1,6 @@
 package com.mycompany.server.integration;
 
+import com.mycompany.server.config.Config;
 import com.rabbitmq.client.*;
 
 public class RabbitMQManager {
@@ -11,10 +12,11 @@ public class RabbitMQManager {
     private RabbitMQManager() {
         try {
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("181.79.9.72");
-            factory.setUsername("usuario");
-            factory.setPassword("usuario123");
-            factory.setPort(6457);
+            var config = Config.getInstance();
+            factory.setHost(config.getHostRabbit());
+            factory.setUsername(config.getUserRabbit());
+            factory.setPassword(config.getPasswordRabbit());
+            factory.setPort(Integer.parseInt(config.getPortRabbit()));
             this.connection = factory.newConnection();
             this.channel = connection.createChannel();
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
