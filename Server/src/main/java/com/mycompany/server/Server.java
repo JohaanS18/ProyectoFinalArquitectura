@@ -1,11 +1,13 @@
 package com.mycompany.server;
 
+import com.mycompany.server.config.Config;
 import com.mycompany.server.controller.ServerController;
 import com.mycompany.server.dao.FileDAO;
 import com.mycompany.server.integration.RabbitMQManager;
 import com.mycompany.server.service.FileService;
 import com.mycompany.server.service.INotificationService;
 import com.mycompany.server.service.RabbitMQNotificationService;
+import io.github.cdimascio.dotenv.Dotenv;
 
 
 import java.io.*;
@@ -16,10 +18,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
-    private static final int SERVER_PORT = 12345;
-
     public static void main(String[] args) {
-        System.out.println("Servidor escuchando en el puerto " + SERVER_PORT);
+
+        Config config = Config.getInstance();
+        var port = config.getPort();
+        System.out.println("Servidor escuchando en el puerto " + config.getPort());
 
         // Crear dependencias
         FileDAO fileDAO = new FileDAO();
@@ -33,7 +36,7 @@ public class Server {
         // Crear un pool de hilos para manejar clientes
         ExecutorService clientHandlerPool = Executors.newFixedThreadPool(10);
 
-        try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
+        try (ServerSocket serverSocket = new ServerSocket(Integer.parseInt(config.getPort()))) {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
