@@ -47,7 +47,7 @@ jobs:
         password: eis2024
         port: 22
         script: |
-          cd /Escritorio/ArquitecturaProyecto/apigetway
+          cd /Escritorio/ArquitecturaProyecto/console
           sudo ls
           sudo docker-compose pull 
           sudo docker stop console
