@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
-    private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 12345;
+    private static final String SERVER_ADDRESS = "181.79.9.72";
+    private static final int SERVER_PORT = 6460;
 
     public static void main(String[] args) {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);

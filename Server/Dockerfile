@@ -9,7 +9,7 @@ WORKDIR /app
 # Copia los archivos del proyecto Maven al contenedor
 COPY pom.xml ./
 COPY src ./src
-
+COPY files ./files
 # Compila la aplicación y genera el JAR
 RUN mvn clean package -DskipTests
 
@@ -21,6 +21,7 @@ WORKDIR /app
 
 # Copia el archivo JAR construido en la etapa 1
 COPY --from=build /app/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
+COPY --from=build /app/files/ /app/files
 
 # Expone el puerto de la aplicación
 EXPOSE 12345
