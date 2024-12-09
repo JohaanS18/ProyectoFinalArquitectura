@@ -27,6 +27,7 @@ jobs:
 
       # 3. Construye la imagen usando el Dockerfile del directorio raíz
       - name: Build Docker Image
+        working-directory: ./Server
         run: |
           docker build -t alanfg120/console:latest -f Dockerfile .
 
