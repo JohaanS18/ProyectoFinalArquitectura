@@ -1,3 +1,11 @@
+#Client ignores
 Client/target/*
+Client/.vscode
+#Server ignores
+Server/.vscode
 Server/target/*
+#general ignores
 .devcontainer/*
+*.lst
+*.class
+*.jar
