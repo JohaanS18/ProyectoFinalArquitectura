@@ -27,6 +27,10 @@ public class Config {
         return getProperty("RABBIT_HOST");
     }
 
+    public String getQueueRabbit() {
+        return getProperty("RABBIT_QUEUE");
+    }
+
     public String getUserRabbit() {
         return getProperty("RABBIT_USER");
     }
