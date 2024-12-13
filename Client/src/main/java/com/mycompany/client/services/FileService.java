@@ -1,6 +1,9 @@
-package com.mycompany.client;
+package com.mycompany.client.services;
+
 
 import java.io.File;
+
+import com.mycompany.client.utils.Response;
 
 public class FileService {
     
