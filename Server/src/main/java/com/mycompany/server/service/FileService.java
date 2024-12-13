@@ -1,12 +1,9 @@
 package com.mycompany.server.service;
 
 import com.mycompany.server.dao.IFileDAO;
-import com.mycompany.server.model.FileMetadata;
 import com.mycompany.server.service.getmetadata.impl.GetMetadataJPG;
 import com.mycompany.server.service.getmetadata.impl.GetMetadataPDF;
 import com.mycompany.server.service.getmetadata.impl.GetMetadataText;
-import com.mycompany.server.utils.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -23,20 +20,15 @@ public class FileService {
         this.notificationService = notificationService;
     }
 
-    public boolean processFile(String filePath) throws IOException, NoSuchAlgorithmException {
-        File file = new File(filePath);
-        if (!file.exists() || !file.isFile()) {
-            System.err.println("Archivo no encontrado o no es un archivo válido: " + filePath);
-            return false;
-        }
-
+    public boolean processFile(File file) throws IOException, NoSuchAlgorithmException {
+        
         try {
-            String metadata = this.getMetadata(filePath);
+            String metadata = this.getMetadata(file);
 
             Map<String, Object> result = fileDAO.saveFile(metadata, file);
             if (result.containsKey("uuid")) {
                 String uuid = (String) result.get("uuid");
-                notificationService.notify("Llegó un nuevo archivo con UUID: " + uuid);
+                notificationService.notify(uuid);
                 return true;
             }
         } catch (Exception e) {
@@ -47,9 +39,9 @@ public class FileService {
         return false;
     }
     
-    public String getMetadata(String path) {
-        GetMetadata meta = this.getInstance(path);
-        String metadataJson = meta.getMetadata(path);
+    public String getMetadata(File file) {
+        GetMetadata meta = this.getInstance(file.getName());
+        String metadataJson = meta.getMetadata(file);
         return metadataJson;
     }
     

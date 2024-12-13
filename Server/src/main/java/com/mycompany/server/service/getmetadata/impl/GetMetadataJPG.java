@@ -22,12 +22,12 @@ import com.mycompany.server.service.getmetadata.interfaces.GetMetadata;
 public class GetMetadataJPG implements GetMetadata {
 
     @Override
-    public String getMetadata(String rutaArchivo) {
+    public String getMetadata(File archivo) {
         try {
             HashMap<String, Object> metadatos = new HashMap<>();
 
             // Leer la imagen
-            ImageInfo imageInfo = Imaging.getImageInfo(new File(rutaArchivo));
+            ImageInfo imageInfo = Imaging.getImageInfo(archivo);
 
             // Obtener metadatos específicos
             // Extraer dimensiones
