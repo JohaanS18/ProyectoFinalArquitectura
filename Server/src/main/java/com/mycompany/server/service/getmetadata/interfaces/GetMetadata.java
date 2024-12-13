@@ -4,10 +4,12 @@
  */
 package com.mycompany.server.service.getmetadata.interfaces;
 
+import java.io.File;
+
 /**
  *
  * @author fabia
  */
 public interface GetMetadata {
-    public String getMetadata(String rutaArchivo);
+    public String getMetadata(File archivo);
 }

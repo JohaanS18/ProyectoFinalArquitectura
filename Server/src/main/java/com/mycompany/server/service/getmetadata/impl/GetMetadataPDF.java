@@ -6,6 +6,9 @@ package com.mycompany.server.service.getmetadata.impl;
 
 import com.google.gson.Gson;
 import com.itextpdf.text.pdf.PdfReader;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import com.mycompany.server.service.getmetadata.interfaces.GetMetadata;
@@ -17,9 +20,9 @@ import com.mycompany.server.service.getmetadata.interfaces.GetMetadata;
 public class GetMetadataPDF implements GetMetadata {
 
     @Override
-    public String getMetadata(String rutaArchivo) {
+    public String getMetadata(File archivo) {
         try {
-            PdfReader reader = new PdfReader(rutaArchivo);
+            PdfReader reader = new PdfReader(new FileInputStream(archivo));
             //PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
             HashMap<String, String> info = reader.getInfo();
             HashMap<String, Object> mapObject = new HashMap<>();

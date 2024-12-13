@@ -18,9 +18,9 @@ import com.mycompany.server.service.getmetadata.interfaces.GetMetadata;
 public class GetMetadataText implements GetMetadata {
 
     @Override
-    public String getMetadata(String rutaArchivo) {
+    public String getMetadata(File archivo) {
         HashMap<String, Object> info = new HashMap<>();
-        File archivo = new File(rutaArchivo);
+        
 
         if (archivo.exists()) {
             info.put("Nombre", archivo.getName());
