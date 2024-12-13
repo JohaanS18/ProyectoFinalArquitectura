@@ -12,8 +12,8 @@ import com.mycompany.client.utils.Response;
 
 
 public class Client {
-    private static final String SERVER_ADDRESS = "181.79.9.72";
-    private static final int SERVER_PORT = 6460;
+    private static final String SERVER_ADDRESS = "localhost";
+    private static final int SERVER_PORT = 12345;
 
     public static void main(String[] args) {
 

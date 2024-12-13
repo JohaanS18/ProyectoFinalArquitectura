@@ -66,8 +66,8 @@ public class ServerController extends Thread{
                     
                     file = (File)obj;
                     System.out.println(file.getName());
-                    buffer = new BufferedReader(new FileReader(file));
-                    buffer.lines().forEach( line -> System.out.println(line));
+                    //buffer = new BufferedReader(new FileReader(file));
+                    //buffer.lines().forEach( line -> System.out.println(line));
                     success = fileService.processFile(file,stream);
                 }
 
