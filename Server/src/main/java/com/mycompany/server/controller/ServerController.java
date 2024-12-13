@@ -6,8 +6,11 @@ package com.mycompany.server.controller;
 import com.mycompany.server.service.FileService;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
@@ -17,37 +20,71 @@ import java.security.NoSuchAlgorithmException;
  */
 
 
-public class ServerController {
+public class ServerController extends Thread{
     private final FileService fileService;
+    private Socket clientSocket;
 
     public ServerController(FileService fileService) {
         this.fileService = fileService;
     }
+    
 
-    public void handleClient(Socket clientSocket) throws NoSuchAlgorithmException {
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true)) {
+    public void handleClient(Socket socket) {
+        
+        this.clientSocket=socket;
+        System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
+        start();
+    }
 
-            String filePath;
 
-            while (true) {
-                output.println("Especifique la ruta del archivo o 'salir':");
-                filePath = input.readLine();
+    @Override
+    public void run() {
 
-                if ("salir".equalsIgnoreCase(filePath)) {
-                    output.println("Desconectado.");
+            try (BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                ObjectInputStream ojectInput = new ObjectInputStream(clientSocket.getInputStream());
+                PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true)) {
+
+            File file;
+            Object obj= null;
+            BufferedReader buffer;
+            boolean success = false;
+            String statusMesage ="Error al procesar el archivo. Verifique la ruta.";
+
+            System.out.println("listen..."+ clientSocket.toString());
+            while ((obj = ojectInput.readObject()) != null) {
+                
+                
+                if ("salir".equalsIgnoreCase(obj.toString())) {
+                    output.println("Desconectado. "+ clientSocket.getInetAddress());                    
                     break;
                 }
 
-                boolean success = fileService.processFile(filePath);
-                if (success) {
-                    output.println("Archivo procesado exitosamente.");
-                } else {
-                    output.println("Error al procesar el archivo. Verifique la ruta.");
+                if(obj instanceof File){
+                    
+                    file = (File)obj;
+                    System.out.println(file.getName());
+                
+                    buffer = new BufferedReader(new FileReader(file));
+                    buffer.lines().forEach( line -> System.out.println(line));
+                    success = fileService.processFile(file);
                 }
+
+                if(success)
+                    statusMesage =  "Archivo procesado exitosamente.";                             
+                
+                output.println(statusMesage);
+
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            //Close soket
+            clientSocket.close();
+           
+            
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            
+        
+        
     }
 }
