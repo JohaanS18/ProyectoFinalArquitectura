@@ -33,16 +33,7 @@ public class Server {
             
             while (true) {
 
-                // Manejar al cliente en un hilo separado
-                clientHandlerPool.execute(() -> {
-                    try {
-                        
-                        new ServerController(fileService).handleClient(serverSocket.accept());
-                        
-                    } catch (IOException ex) {
-                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
+                new ServerController(fileService).handleClient(serverSocket.accept());
             }
         } catch (IOException e) {
             e.printStackTrace();

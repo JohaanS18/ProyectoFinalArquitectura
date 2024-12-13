@@ -35,10 +35,10 @@ public class RabbitMQManager {
         return instance;
     }
 
-    public void notifyNewFile(String metadataJson) {
+    public void notifyNewFile(String message) {
         try {
             var config = Config.getInstance();
-            channel.basicPublish("", config.getQueueRabbit(), null, metadataJson.getBytes());
+            channel.basicPublish("", config.getQueueRabbit(), null, message.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
