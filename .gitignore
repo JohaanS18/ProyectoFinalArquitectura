@@ -1,3 +1,4 @@
+#Client ignores
 Client/target/*
 Server/target/*
 Server/target/classes/com/mycompany/server/Server.class
@@ -29,3 +30,12 @@ Server/target/classes/com/mycompany/server/service/getmetadata/impl/GetMetadataP
 Server/target/classes/com/mycompany/server/service/getmetadata/impl/GetMetadataText.class
 Server/target/classes/com/mycompany/server/utils/DBConnection.class
 Server/target/classes/com/mycompany/server/utils/FileUtils.class
+Client/.vscode
+#Server ignores
+Server/.vscode
+Server/target/*
+#general ignores
+.devcontainer/*
+*.lst
+*.class
+*.jar
