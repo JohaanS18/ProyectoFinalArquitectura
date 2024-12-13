@@ -1,4 +1,4 @@
-package com.mycompany.client;
+package com.mycompany.client.utils;
 
 public class Response <T>{
 
