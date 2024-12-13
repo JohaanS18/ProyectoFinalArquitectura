@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
@@ -46,6 +47,7 @@ public class ServerController extends Thread{
 
             File file;
             Object obj= null;
+            InputStream stream = clientSocket.getInputStream();
             BufferedReader buffer;
             boolean success = false;
             String statusMesage ="Error al procesar el archivo. Verifique la ruta.";
@@ -62,11 +64,11 @@ public class ServerController extends Thread{
                 if(obj instanceof File){
                     
                     file = (File)obj;
-                    System.out.println(file.getName());
                 
+                    System.out.println(file.getName());
                     buffer = new BufferedReader(new FileReader(file));
                     buffer.lines().forEach( line -> System.out.println(line));
-                    success = fileService.processFile(file);
+                    success = fileService.processFile(file,stream);
                 }
 
                 if(success)

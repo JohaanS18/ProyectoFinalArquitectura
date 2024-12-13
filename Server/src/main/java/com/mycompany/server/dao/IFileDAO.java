@@ -6,6 +6,7 @@ package com.mycompany.server.dao;
 import com.mycompany.server.model.FileMetadata;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 /**
@@ -13,5 +14,5 @@ import java.util.Map;
  * @author Johan Sebastian
  */
 public interface IFileDAO {
-    Map<String, Object> saveFile(String metadata, File file) throws IOException, NoSuchAlgorithmException;
+    Map<String, Object> saveFile(String metadata, File file,InputStream stream) throws IOException, NoSuchAlgorithmException;
 }

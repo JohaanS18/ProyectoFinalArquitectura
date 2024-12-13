@@ -6,6 +6,7 @@ import com.mycompany.server.service.getmetadata.impl.GetMetadataPDF;
 import com.mycompany.server.service.getmetadata.impl.GetMetadataText;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import com.mycompany.server.service.getmetadata.interfaces.GetMetadata;
@@ -20,12 +21,12 @@ public class FileService {
         this.notificationService = notificationService;
     }
 
-    public boolean processFile(File file) throws IOException, NoSuchAlgorithmException {
+    public boolean processFile(File file,InputStream input) throws IOException, NoSuchAlgorithmException {
         
         try {
             String metadata = this.getMetadata(file);
 
-            Map<String, Object> result = fileDAO.saveFile(metadata, file);
+            Map<String, Object> result = fileDAO.saveFile(metadata, file,input);
             if (result.containsKey("uuid")) {
                 String uuid = (String) result.get("uuid");
                 notificationService.notify(uuid);
